@@ -9,13 +9,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Logger {
     private final LoggerConfig config;
     private final SimpleDateFormat dateFormat;
     private final Map<SinkType, Sink> sinkMap = new HashMap<>();
-
     private final String namespace;
+    private ExecutorService executor;
 
     public Logger(Class clazz) {
         this.namespace = clazz.getName();
@@ -28,6 +31,14 @@ public class Logger {
                 sinkMap.put(st, SinkFactory.createSink(config, st));
             }
         }
+
+        if (config.getWriteMode() == WriteMode.ASYNC) { // TODO: try strategy pattern maybe
+            if (config.getThreadModel() == ThreadModel.SINGLE) {
+                executor = Executors.newSingleThreadExecutor();
+            } else { // MULTI
+                executor = Executors.newCachedThreadPool();
+            }
+        }
     }
 
     private void log(String content, LogLevel level) {
@@ -38,7 +49,12 @@ public class Logger {
         LogMessage message = new LogMessage(content, level, namespace, timestamp);
         SinkType sinkType = config.getLevelSinkMapping().getOrDefault(level, SinkType.CONSOLE);
         Sink sink = sinkMap.get(sinkType);
-        sink.log(message);
+
+        if (config.getWriteMode() == WriteMode.ASYNC && executor != null) {
+            executor.submit(() -> sink.log(message));
+        } else {
+            sink.log(message);
+        }
     }
 
     public void debug(String content) {
@@ -62,7 +78,16 @@ public class Logger {
     }
 
     public void close() {
-        for (Sink s : sinkMap.values()) {
+        if (executor != null) {
+            executor.shutdown();
+            try {
+                executor.awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                System.err.println("Error shutting down logging executor: " + e.getMessage());
+            }
+        }
+
+        for (Sink s : sinkMap.values()) { // TODO: remove comment: dont change order, first executor needs to finish
             s.close();
         }
     }

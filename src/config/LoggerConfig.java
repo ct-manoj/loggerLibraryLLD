@@ -1,6 +1,8 @@
 package config;
 
 import core.LogLevel;
+import core.ThreadModel;
+import core.WriteMode;
 import sinks.SinkType;
 
 import java.util.HashMap;
@@ -23,9 +25,15 @@ public class LoggerConfig {
 
     private Map<LogLevel, SinkType> levelSinkMapping = new HashMap<>();
 
+    private ThreadModel threadModel;
+    private WriteMode writeMode;
+
     public LoggerConfig(String timeFormat, LogLevel logLevel) {
         this.timeFormat = timeFormat;
         this.logLevel = logLevel;
+
+        this.threadModel = ThreadModel.SINGLE;
+        this.writeMode = WriteMode.SYNC;
     }
 
     // Setters for file sink config
@@ -57,4 +65,9 @@ public class LoggerConfig {
     public Map<LogLevel, SinkType> getLevelSinkMapping() {
         return levelSinkMapping;
     }
+
+    public ThreadModel getThreadModel() { return threadModel; }
+    public void setThreadModel(ThreadModel threadModel) { this.threadModel = threadModel; }
+    public WriteMode getWriteMode() { return writeMode; }
+    public void setWriteMode(WriteMode writeMode) { this.writeMode = writeMode; }
 }

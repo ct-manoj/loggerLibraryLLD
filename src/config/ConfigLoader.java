@@ -1,6 +1,8 @@
 package config;
 
 import core.LogLevel;
+import core.ThreadModel;
+import core.WriteMode;
 import sinks.SinkType;
 
 import java.util.HashMap;
@@ -42,6 +44,9 @@ public class ConfigLoader {
                 configMap.getOrDefault("db_user", "dbuser"),
                 configMap.getOrDefault("db_password", "dbpassword")
         );
+
+        config.setThreadModel(ThreadModel.fromString(configMap.getOrDefault("thread_model", ThreadModel.SINGLE.name())));
+        config.setWriteMode(WriteMode.fromString(configMap.getOrDefault("write_mode", WriteMode.SYNC.name())));
 
         return config;
     }

@@ -1,6 +1,8 @@
 package config;
 
 import core.LogLevel;
+import core.ThreadModel;
+import core.WriteMode;
 import sinks.SinkType;
 
 import java.util.HashMap;
@@ -29,6 +31,9 @@ public class Config {
         configMap.put("db_name", "logdb");
         configMap.put("db_user", "dbuser");
         configMap.put("db_password", "dbpassword");
+
+        configMap.put("thread_model", ThreadModel.SINGLE.name());
+        configMap.put("write_mode", WriteMode.ASYNC.name());
     }
 
     public static Map<String, String> getConfigMap() {
