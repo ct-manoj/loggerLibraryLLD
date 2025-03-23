@@ -45,10 +45,10 @@ public class DBSink implements Sink {
     public synchronized void log(LogMessage message) {
         String sql = "INSERT INTO logs (level, timestamp, namespace, message) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, message.level().toString());
-            pstmt.setString(2, message.timestamp());
-            pstmt.setString(3, message.namespace());
-            pstmt.setString(4, message.content());
+            pstmt.setString(1, message.getLevel().toString());
+            pstmt.setString(2, message.getTimestamp());
+            pstmt.setString(3, message.getNamespace());
+            pstmt.setString(4, message.getContent());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error inserting log into DB: " + e.getMessage());
