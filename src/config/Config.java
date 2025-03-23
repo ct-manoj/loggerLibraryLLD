@@ -15,7 +15,8 @@ public class Config {
         // core.Logger settings
         configMap.put("ts_format", "yyyy-MM-dd HH:mm:ss,SSS");
         configMap.put("log_level", LogLevel.INFO.name());
-        configMap.put("sink_type", SinkType.FILE.name());  // Change to "DB" for database logging
+        // If not provided, default sink will be DEFAULT_SINK_TYPE (i.e. CONSOLE in our case)
+        configMap.put("sink_type", SinkType.CONSOLE.name());
 
         configMap.put("sink_mapping.INFO", SinkType.FILE.name());
         configMap.put("sink_mapping.WARN", SinkType.FILE.name());
@@ -32,7 +33,7 @@ public class Config {
         configMap.put("db_user", "dbuser");
         configMap.put("db_password", "dbpassword");
 
-        configMap.put("thread_model", ThreadModel.SINGLE.name());
+        configMap.put("thread_model", ThreadModel.MULTI.name());
         configMap.put("write_mode", WriteMode.ASYNC.name());
     }
 

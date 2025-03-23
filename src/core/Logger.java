@@ -2,7 +2,9 @@ package core;
 
 import config.ConfigLoader;
 import config.LoggerConfig;
+import factory.LogStrategyFactory;
 import factory.SinkFactory;
+import logstrategy.LogStrategy;
 import sinks.Sink;
 import sinks.SinkType;
 
@@ -10,22 +12,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Logger {
     private final LoggerConfig config;
     private final DateTimeFormatter dateFormatter;
     private final Map<SinkType, Sink> sinkMap = new HashMap<>();
     private final String namespace;
-    private ExecutorService executor; // static? OR singleton Logger?
+    private final LogStrategy logStrategy;
 
     public Logger(Class clazz) {
         this.namespace = clazz.getName();
         this.config = ConfigLoader.loadConfig();
         this.dateFormatter = DateTimeFormatter.ofPattern(config.getTimeFormat());
-        sinkMap.put(SinkType.CONSOLE, SinkFactory.createSink(config, SinkType.CONSOLE)); // TODO: config.getDefaultSinkType()
+        sinkMap.put(config.getDefaultSinkType(), SinkFactory.createSink(config, config.getDefaultSinkType())); // TODO: config.getDefaultSinkType()
 
         for (SinkType st : config.getLevelSinkMapping().values()) {
             if (!sinkMap.containsKey(st)) {
@@ -33,13 +32,7 @@ public class Logger {
             }
         }
 
-        if (config.getWriteMode() == WriteMode.ASYNC) { // TODO: try strategy pattern maybe
-            if (config.getThreadModel() == ThreadModel.SINGLE) {
-                executor = Executors.newSingleThreadExecutor();
-            } else { // MULTI
-                executor = Executors.newCachedThreadPool();
-            }
-        }
+        this.logStrategy = LogStrategyFactory.createStrategy(config.getWriteMode(), config.getThreadModel());
     }
 
     private void log(String content, LogLevel level) {
@@ -48,14 +41,9 @@ public class Logger {
         }
         String timestamp = dateFormatter.format(LocalDateTime.now());
         LogMessage message = new LogMessage(content, level, namespace, timestamp);
-        SinkType sinkType = config.getLevelSinkMapping().getOrDefault(level, SinkType.CONSOLE);
+        SinkType sinkType = config.getLevelSinkMapping().getOrDefault(level, config.getDefaultSinkType());
         Sink sink = sinkMap.get(sinkType);
-
-        if (config.getWriteMode() == WriteMode.ASYNC && executor != null) {
-            executor.submit(() -> sink.log(message));
-        } else {
-            sink.log(message);
-        }
+        logStrategy.log(message, sink);
     }
 
     public void debug(String content) {
@@ -79,15 +67,7 @@ public class Logger {
     }
 
     public void close() {
-        if (executor != null) {
-            executor.shutdown();
-            try {
-                executor.awaitTermination(5, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                System.err.println("Error shutting down logging executor: " + e.getMessage());
-            }
-        }
-
+        logStrategy.close();
         for (Sink s : sinkMap.values()) { // TODO: remove comment: dont change order, first executor needs to finish
             s.close();
         }

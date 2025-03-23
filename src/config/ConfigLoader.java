@@ -15,8 +15,9 @@ public class ConfigLoader {
         // Extract values from Map
         String timeFormat = configMap.getOrDefault("ts_format", "yyyy-MM-dd HH:mm:ss,SSS");
         LogLevel logLevel = LogLevel.valueOf(configMap.getOrDefault("log_level", LogLevel.INFO.name()).toUpperCase());
+        SinkType defaultSink = SinkType.fromString(configMap.getOrDefault("sink_type", LoggerConfig.DEFAULT_SINK_TYPE.name()));
 
-        LoggerConfig config = new LoggerConfig(timeFormat, logLevel);
+        LoggerConfig config = new LoggerConfig(timeFormat, logLevel, defaultSink);
 
         Map<LogLevel, SinkType> levelSinkMapping = new HashMap<>();
         for (String key : configMap.keySet()) {
@@ -33,9 +34,11 @@ public class ConfigLoader {
         }
         config.setLevelSinkMapping(levelSinkMapping);
 
+        // TODO: if condition????
         config.setFileLocation(configMap.getOrDefault("file_location", "logs/application.log"));
         config.setMaxFileSize(Long.parseLong(configMap.getOrDefault("max_file_size", "10")));
 
+        // TODO: if condition????
         // DB sink.Sink settings
         config.setDbConfig(
                 configMap.getOrDefault("db_host", "127.0.0.1"),

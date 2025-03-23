@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoggerConfig {
+    public static final SinkType DEFAULT_SINK_TYPE = SinkType.CONSOLE;
     private String timeFormat;      // e.g. "yyyy-MM-dd HH:mm:ss,SSS"
     private LogLevel logLevel;      // threshold level
     private String fileLocation;    // for file sink
@@ -27,13 +28,15 @@ public class LoggerConfig {
 
     private ThreadModel threadModel;
     private WriteMode writeMode;
+    private SinkType defaultSinkType;
 
-    public LoggerConfig(String timeFormat, LogLevel logLevel) {
+    public LoggerConfig(String timeFormat, LogLevel logLevel, SinkType defaultSinkType) {
         this.timeFormat = timeFormat;
         this.logLevel = logLevel;
 
         this.threadModel = ThreadModel.SINGLE;
         this.writeMode = WriteMode.SYNC;
+        this.defaultSinkType = defaultSinkType;
     }
 
     // Setters for file sink config
@@ -70,4 +73,5 @@ public class LoggerConfig {
     public void setThreadModel(ThreadModel threadModel) { this.threadModel = threadModel; }
     public WriteMode getWriteMode() { return writeMode; }
     public void setWriteMode(WriteMode writeMode) { this.writeMode = writeMode; }
+    public SinkType getDefaultSinkType() { return defaultSinkType; }
 }
