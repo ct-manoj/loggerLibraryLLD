@@ -1,9 +1,9 @@
-package strategy;
+package processor;
 
-import core.LogMessage;
-import sinks.Sink;
+import log.LogMessage;
+import sink.Sink;
 
-public class SyncLogStrategy implements LogStrategy {
+public class SyncLogProcessor implements LogProcessor {
     @Override
     public void log(LogMessage message, Sink sink) {
         sink.log(message);

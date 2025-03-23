@@ -1,9 +1,9 @@
 package config;
 
-import core.LogLevel;
-import core.ThreadModel;
-import core.WriteMode;
-import sinks.SinkType;
+import log.LogLevel;
+import log.ThreadModel;
+import log.WriteMode;
+import sink.SinkType;
 
 import java.util.HashMap;
 import java.util.Map;

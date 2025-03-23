@@ -1,7 +1,7 @@
-package sinks;
+package sink;
 
-import core.LogLevel;
-import core.LogMessage;
+import log.LogLevel;
+import log.LogMessage;
 
 public class ConsoleSink implements Sink {
     @Override

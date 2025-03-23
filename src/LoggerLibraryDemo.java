@@ -1,4 +1,4 @@
-import core.Logger;
+import log.Logger;
 
 public class LoggerLibraryDemo {
     private static final Logger logger = new Logger(LoggerLibraryDemo.class);

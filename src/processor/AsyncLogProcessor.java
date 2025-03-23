@@ -1,17 +1,17 @@
-package strategy;
+package processor;
 
-import core.LogMessage;
-import core.ThreadModel;
-import sinks.Sink;
+import log.LogMessage;
+import log.ThreadModel;
+import sink.Sink;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class AsyncLogStrategy implements LogStrategy {
+public class AsyncLogProcessor implements LogProcessor {
     private final ExecutorService executor;
 
-    public AsyncLogStrategy(ThreadModel threadModel) {
+    public AsyncLogProcessor(ThreadModel threadModel) {
         if (threadModel == ThreadModel.SINGLE) {
             this.executor = Executors.newSingleThreadExecutor();
         } else {

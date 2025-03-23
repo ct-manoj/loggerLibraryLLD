@@ -1,13 +1,12 @@
-package core;
+package log;
 
 import config.ConfigLoader;
 import config.LoggerConfig;
-import factory.LogStrategyFactory;
-import strategy.LogStrategy;
-import registry.SinkRegistry;
-import registry.SinkRegistryFactory;
-import sinks.Sink;
-import sinks.SinkType;
+import processor.LogProcessor;
+import sink.SinkRegistry;
+import sink.SinkRegistryFactory;
+import sink.Sink;
+import sink.SinkType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +15,7 @@ public class Logger {
     private final LoggerConfig config;
     private final DateTimeFormatter dateFormatter;
     private final String namespace;
-    private final LogStrategy logStrategy;
+    private final LogProcessor logStrategy;
     private final SinkRegistry sinkRegistry;
 
     public Logger(Class clazz) {

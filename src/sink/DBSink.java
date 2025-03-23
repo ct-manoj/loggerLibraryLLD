@@ -1,6 +1,6 @@
-package sinks;
+package sink;
 
-import core.LogMessage;
+import log.LogMessage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

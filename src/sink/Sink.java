@@ -1,6 +1,6 @@
-package sinks;
+package sink;
 
-import core.LogMessage;
+import log.LogMessage;
 
 public interface Sink {
     void log(LogMessage message);

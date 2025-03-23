@@ -1,4 +1,4 @@
-package sinks;
+package sink;
 
 public enum SinkType {
     FILE, DB, CONSOLE;

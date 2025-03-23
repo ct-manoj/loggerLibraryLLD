@@ -1,7 +1,7 @@
-package registry;
+package sink;
 
-import sinks.Sink;
-import sinks.SinkType;
+import sink.Sink;
+import sink.SinkType;
 
 import java.util.Collection;
 import java.util.EnumMap;

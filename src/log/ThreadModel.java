@@ -1,4 +1,4 @@
-package core;
+package log;
 
 public enum ThreadModel {
     SINGLE, MULTI;

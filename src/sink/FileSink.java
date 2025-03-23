@@ -1,6 +1,6 @@
-package sinks;
+package sink;
 
-import core.LogMessage;
+import log.LogMessage;
 import util.LogFileManager;
 
 public class FileSink implements Sink {

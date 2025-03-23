@@ -1,11 +1,11 @@
-package factory;
+package sink;
 
 import config.LoggerConfig;
-import sinks.Sink;
-import sinks.ConsoleSink;
-import sinks.DBSink;
-import sinks.FileSink;
-import sinks.SinkType;
+import sink.Sink;
+import sink.ConsoleSink;
+import sink.DBSink;
+import sink.FileSink;
+import sink.SinkType;
 
 public class SinkFactory {
     private SinkFactory() {}

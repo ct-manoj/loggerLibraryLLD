@@ -1,9 +1,6 @@
-package registry;
+package sink;
 
 import config.LoggerConfig;
-import factory.SinkFactory;
-import sinks.Sink;
-import sinks.SinkType;
 
 public class SinkRegistryFactory {
     private SinkRegistryFactory() {}

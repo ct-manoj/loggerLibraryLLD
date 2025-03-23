@@ -1,4 +1,4 @@
-package core;
+package log;
 
 public class LogMessage {
     private final String content;
