@@ -1,4 +1,4 @@
-package logstrategy;
+package strategy;
 
 import core.LogMessage;
 import core.ThreadModel;
