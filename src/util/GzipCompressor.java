@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
 public class GzipCompressor {
+    private GzipCompressor() {}
     public static void compress(File source, File destination) throws IOException {
         try (FileInputStream fis = new FileInputStream(source);
              FileOutputStream fos = new FileOutputStream(destination);

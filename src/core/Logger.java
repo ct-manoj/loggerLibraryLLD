@@ -29,7 +29,7 @@ public class Logger {
 
     private void log(String content, LogLevel level) {
         if (level.ordinal() < config.getLogLevel().ordinal()) {
-            return; // Ignore messages below the threshold
+            return;
         }
         String timestamp = dateFormatter.format(LocalDateTime.now());
         LogMessage message = new LogMessage(content, level, namespace, timestamp);

@@ -7,6 +7,9 @@ import strategy.LogStrategy;
 import strategy.SyncLogStrategy;
 
 public class LogStrategyFactory {
+
+    private LogStrategyFactory(){}
+
     public static LogStrategy createStrategy(WriteMode writeMode, ThreadModel threadModel) {
         if (writeMode == WriteMode.ASYNC) {
             return new AsyncLogStrategy(threadModel);

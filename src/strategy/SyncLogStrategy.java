@@ -10,7 +10,5 @@ public class SyncLogStrategy implements LogStrategy {
     }
 
     @Override
-    public void close() {
-        // No executor to close for synchronous strategy.
-    }
+    public void close() {}
 }

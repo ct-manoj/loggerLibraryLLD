@@ -14,7 +14,5 @@ public class ConsoleSink implements Sink {
     }
 
     @Override
-    public void close() { // TODO: interface segregation
-        // Nothing to close for console output.
-    }
+    public void close() {}
 }

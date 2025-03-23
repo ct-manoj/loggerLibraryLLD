@@ -11,7 +11,7 @@ public class FileSink implements Sink {
     }
 
     @Override
-    public synchronized void log(LogMessage message) { // TODO: discuss with Arif on synchronized
+    public synchronized void log(LogMessage message) {
         fileManager.write(message.toString());
     }
 

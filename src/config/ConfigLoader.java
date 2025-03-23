@@ -25,8 +25,8 @@ public class ConfigLoader {
         String dbName = configMap.getOrDefault("db_name", "logdb");
         String dbUser = configMap.getOrDefault("db_user", "dbuser");
         String dbPassword = configMap.getOrDefault("db_password", "dbpassword");
-        ThreadModel threadModel = ThreadModel.fromString(configMap.getOrDefault("thread_model", ThreadModel.SINGLE.name()));
-        WriteMode writeMode = WriteMode.fromString(configMap.getOrDefault("write_mode", WriteMode.SYNC.name()));
+        ThreadModel threadModel = ThreadModel.fromValue(configMap.getOrDefault("thread_model", ThreadModel.SINGLE.name()));
+        WriteMode writeMode = WriteMode.fromValue(configMap.getOrDefault("write_mode", WriteMode.SYNC.name()));
 
         LoggerConfig.Builder builder = LoggerConfig.builder()
                 .timeFormat(timeFormat)

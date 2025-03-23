@@ -9,21 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoggerConfig {
-    private final String timeFormat;      // e.g. "yyyy-MM-dd HH:mm:ss,SSS"
-    private final LogLevel logLevel;      // threshold level
-    private String fileLocation;    // for file sink
+    private final String timeFormat;
+    private final LogLevel logLevel;
+    private String fileLocation;
 
-    // DB-specific configuration
     private String dbHost;
     private int dbPort;
     private String dbName;
     private String dbUser;
     private String dbPassword;
 
-    // Maximum file size for file sink rotation (in bytes)
     private long maxFileSize;
 
-    private Map<LogLevel, SinkType> levelSinkMapping = new HashMap<>();
+    private Map<LogLevel, SinkType> levelSinkMapping;
 
     private ThreadModel threadModel;
     private WriteMode writeMode;
