@@ -18,9 +18,9 @@ public class Config {
         // If not provided, default sink will be DEFAULT_SINK_TYPE (i.e. CONSOLE in our case)
         configMap.put("default_sink_type", SinkType.CONSOLE.name());
 
-        configMap.put("sink_mapping.INFO", SinkType.FILE.name());
+        configMap.put("sink_mapping.INFO", SinkType.CONSOLE.name());
         configMap.put("sink_mapping.WARN", SinkType.FILE.name());
-        configMap.put("sink_mapping.ERROR", SinkType.CONSOLE.name());
+        configMap.put("sink_mapping.ERROR", SinkType.FILE.name());
 
         // File sink.Sink Configuration
         configMap.put("file_location", "logs/application.log");

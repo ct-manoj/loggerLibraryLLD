@@ -9,27 +9,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigLoader {
+    public static final SinkType DEFAULT_SINK_TYPE = SinkType.CONSOLE;
+    public static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.INFO;
+
     public static LoggerConfig loadConfig() {
         Map<String, String> configMap = Config.getConfigMap();
 
-        // Extract values from Map
         String timeFormat = configMap.getOrDefault("ts_format", "yyyy-MM-dd HH:mm:ss,SSS");
-        LogLevel logLevel = LogLevel.valueOf(configMap.getOrDefault("threshold_log_level", LoggerConfig.DEFAULT_LOG_LEVEL.name()).toUpperCase());
-        SinkType defaultSink = SinkType.fromString(configMap.getOrDefault("default_sink_type", LoggerConfig.DEFAULT_SINK_TYPE.name()));
+        LogLevel logLevel = LogLevel.valueOf(configMap.getOrDefault("threshold_log_level", DEFAULT_LOG_LEVEL.name()).toUpperCase());
+        SinkType defaultSink = SinkType.fromString(configMap.getOrDefault("default_sink_type", DEFAULT_SINK_TYPE.name()));
+        String fileLocation = configMap.getOrDefault("file_location", "logs/application.log");
+        long maxFileSize = Long.parseLong(configMap.getOrDefault("max_file_size", "10"));
+        String dbHost = configMap.getOrDefault("db_host", "127.0.0.1");
+        int dbPort = Integer.parseInt(configMap.getOrDefault("db_port", "5432"));
+        String dbName = configMap.getOrDefault("db_name", "logdb");
+        String dbUser = configMap.getOrDefault("db_user", "dbuser");
+        String dbPassword = configMap.getOrDefault("db_password", "dbpassword");
+        ThreadModel threadModel = ThreadModel.fromString(configMap.getOrDefault("thread_model", ThreadModel.SINGLE.name()));
+        WriteMode writeMode = WriteMode.fromString(configMap.getOrDefault("write_mode", WriteMode.SYNC.name()));
 
-        LoggerConfig config = new LoggerConfig(timeFormat, logLevel, defaultSink);
+        LoggerConfig.Builder builder = LoggerConfig.builder()
+                .timeFormat(timeFormat)
+                .logLevel(logLevel)
+                .defaultSinkType(defaultSink)
+                .fileLocation(fileLocation)
+                .maxFileSize(maxFileSize)
+                .dbConfig(dbHost,dbPort,dbName,dbUser,dbPassword)
+                .threadModel(threadModel)
+                .writeMode(writeMode)
+                .levelSinkMapping(getLogLevelSinkTypeMap(configMap));
 
-        config.setLevelSinkMapping(getLogLevelSinkTypeMap(configMap));
-
-        // TODO: if condition????
-        applyFileSettings(config, configMap);
-
-        // TODO: if condition????
-        applyDbSettings(config, configMap);
-
-        applyOptionalSettings(config, configMap);
-
-        return config;
+        return builder.build();
     }
 
     private static Map<LogLevel, SinkType> getLogLevelSinkTypeMap(Map<String, String> configMap) {
@@ -47,31 +57,5 @@ public class ConfigLoader {
             }
         }
         return levelSinkMapping;
-    }
-
-    private static void applyFileSettings(LoggerConfig config, Map<String, String> configMap) {
-        String fileLocation = configMap.getOrDefault("file_location", "logs/application.log");
-        config.setFileLocation(fileLocation);
-        long maxFileSize = Long.parseLong(configMap.getOrDefault("max_file_size", "10"));
-        config.setMaxFileSize(maxFileSize);
-    }
-
-    private static void applyDbSettings(LoggerConfig config, Map<String, String> configMap) {
-        config.setDbConfig(
-                configMap.getOrDefault("db_host", "127.0.0.1"),
-                Integer.parseInt(configMap.getOrDefault("db_port", "5432")),
-                configMap.getOrDefault("db_name", "logdb"),
-                configMap.getOrDefault("db_user", "dbuser"),
-                configMap.getOrDefault("db_password", "dbpassword")
-        );
-    }
-
-    private static void applyOptionalSettings(LoggerConfig config, Map<String, String> configMap) {
-        ThreadModel threadModel = ThreadModel.fromString(
-                configMap.getOrDefault("thread_model", ThreadModel.SINGLE.name()));
-        config.setThreadModel(threadModel);
-        WriteMode writeMode = WriteMode.fromString(
-                configMap.getOrDefault("write_mode", WriteMode.SYNC.name()));
-        config.setWriteMode(writeMode);
     }
 }
