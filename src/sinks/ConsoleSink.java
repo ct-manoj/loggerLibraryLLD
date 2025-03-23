@@ -1,7 +1,6 @@
 package sinks;
 
 import core.LogMessage;
-import core.Sink;
 
 public class ConsoleSink implements Sink {
     @Override

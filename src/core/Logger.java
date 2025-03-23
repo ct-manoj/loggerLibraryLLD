@@ -3,10 +3,11 @@ package core;
 import config.ConfigLoader;
 import config.LoggerConfig;
 import factory.SinkFactory;
+import sinks.Sink;
 import sinks.SinkType;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -15,15 +16,15 @@ import java.util.concurrent.TimeUnit;
 
 public class Logger {
     private final LoggerConfig config;
-    private final SimpleDateFormat dateFormat;
+    private final DateTimeFormatter dateFormatter;
     private final Map<SinkType, Sink> sinkMap = new HashMap<>();
     private final String namespace;
-    private ExecutorService executor;
+    private ExecutorService executor; // static? OR singleton Logger?
 
     public Logger(Class clazz) {
         this.namespace = clazz.getName();
         this.config = ConfigLoader.loadConfig();
-        this.dateFormat = new SimpleDateFormat(config.getTimeFormat());
+        this.dateFormatter = DateTimeFormatter.ofPattern(config.getTimeFormat());
         sinkMap.put(SinkType.CONSOLE, SinkFactory.createSink(config, SinkType.CONSOLE)); // TODO: config.getDefaultSinkType()
 
         for (SinkType st : config.getLevelSinkMapping().values()) {
@@ -45,7 +46,7 @@ public class Logger {
         if (level.ordinal() < config.getLogLevel().ordinal()) {
             return; // Ignore messages below the threshold
         }
-        String timestamp = dateFormat.format(new Date());
+        String timestamp = dateFormatter.format(LocalDateTime.now());
         LogMessage message = new LogMessage(content, level, namespace, timestamp);
         SinkType sinkType = config.getLevelSinkMapping().getOrDefault(level, SinkType.CONSOLE);
         Sink sink = sinkMap.get(sinkType);

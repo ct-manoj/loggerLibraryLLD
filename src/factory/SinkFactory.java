@@ -1,7 +1,7 @@
 package factory;
 
 import config.LoggerConfig;
-import core.Sink;
+import sinks.Sink;
 import sinks.ConsoleSink;
 import sinks.DBSink;
 import sinks.FileSink;

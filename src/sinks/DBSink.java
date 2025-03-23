@@ -1,7 +1,6 @@
 package sinks;
 
 import core.LogMessage;
-import core.Sink;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
