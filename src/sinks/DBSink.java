@@ -9,6 +9,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBSink implements Sink {
+
+    private static final String CREATE_TABLE_SQL =
+            "CREATE TABLE IF NOT EXISTS logs (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "level VARCHAR(10), " +
+                    "timestamp VARCHAR(50), " +
+                    "namespace VARCHAR(100), " +
+                    "message TEXT" +
+                    ")";
+    private static final String INSERT_LOG_SQL =
+            "INSERT INTO logs (level, timestamp, namespace, message) VALUES (?, ?, ?, ?)";
+
     private Connection connection;
 
     public DBSink(String dbHost, int dbPort, String dbName, String dbUser, String dbPassword) {
@@ -18,7 +30,6 @@ public class DBSink implements Sink {
 
     private void openConnection(String dbHost, int dbPort, String dbName, String dbUser, String dbPassword) {
         try {
-            // For example, using PostgreSQL. Change the URL for your database.
             String url = "jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName;
             connection = DriverManager.getConnection(url, dbUser, dbPassword);
         } catch (SQLException e) {
@@ -27,14 +38,8 @@ public class DBSink implements Sink {
     }
 
     private void createLogTableIfNeeded() {
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS logs ("
-                + "id SERIAL PRIMARY KEY, "
-                + "level VARCHAR(10), "
-                + "timestamp VARCHAR(50), "
-                + "namespace VARCHAR(100), "
-                + "message TEXT)";
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute(createTableSQL);
+            stmt.execute(CREATE_TABLE_SQL);
         } catch (SQLException e) {
             System.err.println("Error creating logs table: " + e.getMessage());
         }
@@ -42,8 +47,7 @@ public class DBSink implements Sink {
 
     @Override
     public synchronized void log(LogMessage message) {
-        String sql = "INSERT INTO logs (level, timestamp, namespace, message) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(INSERT_LOG_SQL)) {
             pstmt.setString(1, message.getLevel().toString());
             pstmt.setString(2, message.getTimestamp());
             pstmt.setString(3, message.getNamespace());

@@ -1,11 +1,16 @@
 package sinks;
 
+import core.LogLevel;
 import core.LogMessage;
 
 public class ConsoleSink implements Sink {
     @Override
-    public synchronized void log(LogMessage message) {
-        System.out.println(message.toString());
+    public void log(LogMessage message) {
+        if (message.getLevel().ordinal() >= LogLevel.ERROR.ordinal()) {
+            System.err.println(message);
+        } else {
+            System.out.println(message);
+        }
     }
 
     @Override
