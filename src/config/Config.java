@@ -15,6 +15,10 @@ public class Config {
         configMap.put("log_level", LogLevel.INFO.name());
         configMap.put("sink_type", SinkType.FILE.name());  // Change to "DB" for database logging
 
+        configMap.put("sink_mapping.INFO", SinkType.FILE.name());
+        configMap.put("sink_mapping.WARN", SinkType.FILE.name());
+        configMap.put("sink_mapping.ERROR", SinkType.CONSOLE.name());
+
         // File sink.Sink Configuration
         configMap.put("file_location", "logs/application.log");
         configMap.put("max_file_size", "1048576"); // 1MB

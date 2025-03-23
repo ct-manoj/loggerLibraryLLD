@@ -3,10 +3,12 @@ package config;
 import core.LogLevel;
 import sinks.SinkType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LoggerConfig {
     private String timeFormat;      // e.g. "yyyy-MM-dd HH:mm:ss,SSS"
     private LogLevel logLevel;      // threshold level
-    private SinkType sinkType;        // "FILE", "DB", etc.
     private String fileLocation;    // for file sink
 
     // DB-specific configuration
@@ -19,10 +21,11 @@ public class LoggerConfig {
     // Maximum file size for file sink rotation (in bytes)
     private long maxFileSize;
 
-    public LoggerConfig(String timeFormat, LogLevel logLevel, SinkType sinkType) {
+    private Map<LogLevel, SinkType> levelSinkMapping = new HashMap<>();
+
+    public LoggerConfig(String timeFormat, LogLevel logLevel) {
         this.timeFormat = timeFormat;
         this.logLevel = logLevel;
-        this.sinkType = sinkType;
     }
 
     // Setters for file sink config
@@ -40,7 +43,6 @@ public class LoggerConfig {
 
     public String getTimeFormat() { return timeFormat; }
     public LogLevel getLogLevel() { return logLevel; }
-    public SinkType getSinkType() { return sinkType; }
     public String getFileLocation() { return fileLocation; }
     public long getMaxFileSize() { return maxFileSize; }
     public String getDbHost() { return dbHost; }
@@ -48,4 +50,11 @@ public class LoggerConfig {
     public String getDbName() { return dbName; }
     public String getDbUser() { return dbUser; }
     public String getDbPassword() { return dbPassword; }
+
+    public void setLevelSinkMapping(Map<LogLevel, SinkType> mapping) {
+        this.levelSinkMapping = mapping;
+    }
+    public Map<LogLevel, SinkType> getLevelSinkMapping() {
+        return levelSinkMapping;
+    }
 }

@@ -5,11 +5,8 @@ import core.Logger;
 
 public class LoggerLibraryDemo {
     public static void main(String[] args) {
-        // Load configuration from the config.ConfigLoader
-        LoggerConfig config = ConfigLoader.loadConfig();
-
         // Create core.Logger with loaded configuration
-        Logger logger = new Logger(config);
+        Logger logger = new Logger();
 
         int i=10000;
         while (i-->0) {
