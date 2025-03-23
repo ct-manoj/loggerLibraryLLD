@@ -14,9 +14,9 @@ public class Config {
     static {
         // core.Logger settings
         configMap.put("ts_format", "yyyy-MM-dd HH:mm:ss,SSS");
-        configMap.put("log_level", LogLevel.INFO.name());
+        configMap.put("threshold_log_level", LogLevel.INFO.name());
         // If not provided, default sink will be DEFAULT_SINK_TYPE (i.e. CONSOLE in our case)
-        configMap.put("sink_type", SinkType.CONSOLE.name());
+        configMap.put("default_sink_type", SinkType.CONSOLE.name());
 
         configMap.put("sink_mapping.INFO", SinkType.FILE.name());
         configMap.put("sink_mapping.WARN", SinkType.FILE.name());

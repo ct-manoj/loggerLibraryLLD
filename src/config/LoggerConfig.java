@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class LoggerConfig {
     public static final SinkType DEFAULT_SINK_TYPE = SinkType.CONSOLE;
+    public static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.INFO;
     private String timeFormat;      // e.g. "yyyy-MM-dd HH:mm:ss,SSS"
     private LogLevel logLevel;      // threshold level
     private String fileLocation;    // for file sink

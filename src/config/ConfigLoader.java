@@ -14,8 +14,8 @@ public class ConfigLoader {
 
         // Extract values from Map
         String timeFormat = configMap.getOrDefault("ts_format", "yyyy-MM-dd HH:mm:ss,SSS");
-        LogLevel logLevel = LogLevel.valueOf(configMap.getOrDefault("log_level", LogLevel.INFO.name()).toUpperCase());
-        SinkType defaultSink = SinkType.fromString(configMap.getOrDefault("sink_type", LoggerConfig.DEFAULT_SINK_TYPE.name()));
+        LogLevel logLevel = LogLevel.valueOf(configMap.getOrDefault("threshold_log_level", LoggerConfig.DEFAULT_LOG_LEVEL.name()).toUpperCase());
+        SinkType defaultSink = SinkType.fromString(configMap.getOrDefault("default_sink_type", LoggerConfig.DEFAULT_SINK_TYPE.name()));
 
         LoggerConfig config = new LoggerConfig(timeFormat, logLevel, defaultSink);
 
