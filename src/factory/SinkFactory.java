@@ -8,6 +8,8 @@ import sinks.FileSink;
 import sinks.SinkType;
 
 public class SinkFactory {
+    // TODO: Design your logger library to allow users to provide their own implementation of
+    // sink. Is this being fulfilled? Coz user cant edit this factory, since its in our package
     public static Sink createSink(LoggerConfig config, SinkType sinkType) {
         switch (sinkType) {
             case FILE:
